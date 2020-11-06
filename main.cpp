@@ -4,44 +4,57 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-enum programExecutionTypeEnum
+#include <chrono>
+#include <random>
+
+enum ProgramExecutionTypeEnum
 {
     SINGLE_PROBLEM,
     PARAMETERIZED_PROBLEM,
     FULL_TESTING
 };
+
+class Clock
+{
+
+};
+class Generator
+{
+    int arraySize;
+    int table[];
+    public:
+    Generator(int ballsNumber)
+    {
+        arraySize = ballsNumber;
+    }
+    
+    void generateRandomly()
+    {
+        std::random_device device;
+        std::mt19937 randomNumberGenerator(device());
+        std::uniform_int_distribution<std::mt19937::result_type> distBalls(0, 2);
+        for (int a = 0; a < arraySize; a++)
+        {
+            table[a] = distBalls(randomNumberGenerator);
+            std::cout<<table[a]<<std::endl;
+        }
+
+    }
+};
+
+class AlgorithmRunner
+{
+    //TODO
+};
+
 class InterfaceHandler
 {
-public:
-    int numberOfArguments;
+private:
+    AlgorithmRunner algorithmRunner;
+    ProgramExecutionTypeEnum programExecutionType;
     std::vector<std::string> arguments;
-    std::string inputFile;
-    std::string outputFile;
-    programExecutionTypeEnum programExecutionType;
-    int problemSize, blueBalls, greenBalls, redBalls;
-    int numberOfProblems;
-    int step;
-    int numberOfInstances;
-    InterfaceHandler(int argc, char **&argv)
-    {
-        this->numberOfArguments = argc;
-        std::vector<std::string> temp(argv, argv + argc);
-        this->arguments = temp;
-    }
-    int startInterface()
-    {
-        if (numberOfArguments <= 1)
-        {
-            displayHelp();
-            return 0;
-        }
-        else
-        {
-            if (!isSyntaxCorrect())
-                return 0;
-        }
-    }
-
+    std::string inputFile, outputFile;
+    int numberOfArguments, problemSize, blueBalls, greenBalls, redBalls, numberOfProblems, step, numberOfInstances;
     void displayHelp()
     {
         std::cout << "\n"
@@ -65,20 +78,25 @@ public:
             {
                 programExecutionType = SINGLE_PROBLEM;
                 parseSingleProblem();
+                //runAlgorithm(SINGLE_PROBLEM);
             }
             else if (numberOfArguments == 8)
             {
                 programExecutionType = PARAMETERIZED_PROBLEM;
                 parseParameterizedProblem();
+                //runAlgorithm(PARAMETERIZED_PROBLEM);
             }
             else if (numberOfArguments == 10)
             {
                 programExecutionType = FULL_TESTING;
-                //parseFullTesting();
+                parseFullTesting();
+                //runAlgorithm(PARAMETERIZED_PROBLEM);
             }
             else
             {
                 std::cout << "The specified amount of argument does not match with any type of program execution" << std::endl;
+                std::cout << "Please refer to the help below:" << std::endl;
+                displayHelp();
                 return false;
             }
         }
@@ -142,6 +160,27 @@ public:
         catch (const std::invalid_argument &invalidArgument)
         {
             throw invalidArgument.what();
+        }
+    }
+
+public:
+    InterfaceHandler(int argc, char **&argv)
+    {
+        this->numberOfArguments = argc;
+        std::vector<std::string> temp(argv, argv + argc);
+        this->arguments = temp;
+    }
+    int startInterface()
+    {
+        if (numberOfArguments <= 1)
+        {
+            displayHelp();
+            return 0;
+        }
+        else
+        {
+            if (!isSyntaxCorrect())
+                return 0;
         }
     }
 };
