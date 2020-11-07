@@ -16,30 +16,67 @@ enum ProgramExecutionTypeEnum
 
 class Clock
 {
-
 };
+
 class Generator
 {
-    int arraySize;
-    int table[];
-    public:
+    int ballsArraySize;
+    std::random_device device;
+    std::mt19937 randomNumberGenerator;
+    std::uniform_int_distribution<int> ballsDistributor;
+    std::vector<char> ballsArray;
+private:
+char transformIntToCharBall(int number)
+    {
+        if (number == 0)
+            return 'B';
+        if (number == 1)
+            return 'G';
+        if (number = 2)
+            return 'R';
+        return;
+    }
+
+public:
     Generator(int ballsNumber)
     {
-        arraySize = ballsNumber;
+        ballsArraySize = ballsNumber;
+        randomNumberGenerator = std::mt19937(device());
+        ballsDistributor = std::uniform_int_distribution<int>(std::uniform_int_distribution<>(0, 2));
     }
-    
+
     void generateRandomly()
     {
-        std::random_device device;
-        std::mt19937 randomNumberGenerator(device());
-        std::uniform_int_distribution<std::mt19937::result_type> distBalls(0, 2);
-        for (int a = 0; a < arraySize; a++)
+        for (int a = 0; a < ballsArraySize; a++)
         {
-            table[a] = distBalls(randomNumberGenerator);
-            std::cout<<table[a]<<std::endl;
+            int generatedNumber = ballsDistributor(randomNumberGenerator);
+            ballsArray.push_back(transformIntToCharBall(generatedNumber));
         }
-
     }
+
+    void generateProportionally(int b, int g, int r)
+    {
+        int counter = 0;
+        while (counter < b)
+        {
+            ballsArray.push_back('B');
+            counter++;
+        }
+        counter = 0;
+        while (counter < g)
+        {
+            ballsArray.push_back('G');
+            counter++;
+        }
+        counter = 0;
+        while (counter < r)
+        {
+            ballsArray.push_back('R');
+            counter++;
+        }
+        std::random_shuffle(ballsArray.begin(), ballsArray.end());
+    }
+
 };
 
 class AlgorithmRunner
@@ -64,7 +101,7 @@ private:
         std::cout << "2) crane -m2 -n X -d B G R >> out.txt gets problem size X from user";
         std::cout << " followed by B,G and R which are respectfully the amount of blue, green and red balls and saves the result to out.txt" << std::endl;
         std::cout << "3) crane -m3 -n A -k B -step C -r D allows to perform the whole testing phase-A is the problem size (number of balls) "
-                  << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a table saved in the output_table.txt file." << std::endl;
+                  << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a ballsArray saved in the output_ballsArray.txt file." << std::endl;
         std::cout << "--------------------------------------------------------------------------------------------------------------------------------------------------"
                   << "\n"
                   << std::endl;
@@ -114,14 +151,14 @@ private:
     void parseSingleProblem()
     {
         if (arguments[1] != "-m1")
-            throw "Incorrect syntax or incorrect number of arguments";
+            throw "You used an amount of arguments characteristic for mode 1, but there's no -m1 modifier";
     }
 
     void parseParameterizedProblem()
     {
         //crane -m2 -n X -d A B C >> out.txt
         if (arguments[1] != "-m2")
-            throw "Used an incorrect amount of arguments";
+            throw "You used an amount of arguments characteristic for mode 2, but there's no -m2 modifier";
         if (arguments[2] != "-n")
             throw "Used a wrong specifier, there should be -n after -m2";
         try
@@ -147,7 +184,7 @@ private:
     {
         //crane -m3 -n A -k B -step C -r D
         if (arguments[1] != "-m3")
-            throw "Used an incorrect number of arguments";
+            throw "You used an amount of arguments characteristic for mode 3, but there's no -m3 modifier";
         if (arguments[2] != "-n")
             throw "Used a wrong specifier, there should be -n after -m3";
         try
