@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <chrono>
 #include <random>
-
+#include <algorithm>
 enum ProgramExecutionTypeEnum
 {
     SINGLE_PROBLEM,
@@ -16,6 +16,24 @@ enum ProgramExecutionTypeEnum
 
 class Clock
 {
+private:
+    std::chrono::high_resolution_clock::time_point startTime, endTime;
+    std::chrono::duration<double> timespan;
+
+public:
+    void start()
+    {
+        startTime = std::chrono::high_resolution_clock::now();
+    }
+    void end()
+    {
+        endTime = std::chrono::high_resolution_clock::now();
+        timespan = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+    }
+    double elapsedTime()
+    {
+        return timespan.count();
+    }
 };
 
 class Generator
@@ -25,8 +43,9 @@ class Generator
     std::mt19937 randomNumberGenerator;
     std::uniform_int_distribution<int> ballsDistributor;
     std::vector<char> ballsArray;
+
 private:
-char transformIntToCharBall(int number)
+    char transformIntToCharBall(int number)
     {
         if (number == 0)
             return 'B';
@@ -34,7 +53,7 @@ char transformIntToCharBall(int number)
             return 'G';
         if (number = 2)
             return 'R';
-        return;
+        return 'E'; //TODO
     }
 
 public:
@@ -76,7 +95,6 @@ public:
         }
         std::random_shuffle(ballsArray.begin(), ballsArray.end());
     }
-
 };
 
 class AlgorithmRunner
@@ -225,5 +243,11 @@ public:
 int main(int argc, char **argv)
 {
     InterfaceHandler interface(argc, argv);
-    interface.startInterface();
+    Clock timer;
+    timer.start();
+    for (int a=0;a<10000000;a++)
+        std::cout<<"*";
+    timer.end();
+    std::cout<<"\n TADAM "<<timer.elapsedTime()<<std::endl;
+    //interface.startInterface();
 }
