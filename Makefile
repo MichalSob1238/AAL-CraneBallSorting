@@ -1,24 +1,23 @@
-# Makefile for Writing Make Files Example
+CXX		  := g++
+CXX_FLAGS := -Wall -Wextra -std=c++17 -ggdb
 
-# *****************************************************
-# Variables to control Makefile operation
+BIN		:= bin
+SRC		:= src
+INCLUDE	:= include
+LIB		:= lib
 
-CXX = g++
-CXXFLAGS = -Wall -g
+LIBRARIES	:=
+EXECUTABLE	:= main
 
-# ****************************************************
-# Targets needed to bring the executable up to date
 
-main: main.o InterfaceHandler.o Clock.o
-	$(CXX) $(CXXFLAGS) -o crane main.o InterfaceHandler.o Clock.o
+all: $(BIN)/$(EXECUTABLE)
 
-main.o: main.cpp InterfaceHandler.hpp Clock.hpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+run: clean all
+	clear
+	./$(BIN)/$(EXECUTABLE)
 
-AlgorithmRunner.o: AlgorithmRunner.hpp Clock.hpp
+$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
-Clock.o: Clock.hpp
-
-Generator.o: Generator.hpp
-
-InterfaceHandler.o: InterfaceHandler.hpp AlgorithmRunner.hpp
+clean:
+	-rm $(BIN)/*

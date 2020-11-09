@@ -21,7 +21,7 @@ bool InterfaceHandler::isSyntaxCorrect()
     {
         if (numberOfArguments == 2)
             parseSingleProblem();
-        else if (numberOfArguments == 8)
+        else if (numberOfArguments == 4 || numberOfArguments == 8)
             parseParameterizedProblem();
         else if (numberOfArguments == 10)
             parseFullTesting();
@@ -57,6 +57,24 @@ void InterfaceHandler::parseParameterizedProblem()
         throw "You used an amount of arguments characteristic for mode 2, but there's no -m2 modifier";
     if (arguments[2] != "-n")
         throw "Used a wrong specifier, there should be -n after -m2";
+    if (numberOfArguments == 4)
+    {
+        try
+        {
+            problemSize == std::stoi(arguments[3]);
+        }
+        catch (const std::invalid_argument &invalidArgument)
+        {
+            throw invalidArgument.what();
+        }
+        if (problemSize < 1)
+            throw "Invalid problem size";
+        blueBalls = -1;
+        greenBalls = -1;
+        redBalls = -1;
+        return;
+    }
+
     try
     {
         problemSize = std::stoi(arguments[3]);
@@ -112,24 +130,19 @@ int InterfaceHandler::startInterface()
         displayHelp();
         return 0;
     }
-    else
-    {
-        if (!isSyntaxCorrect())
-            return 0;
-    }
+    if (!isSyntaxCorrect())
+        return 0;
     if (numberOfArguments == 2)
     {
-        programExecutionType = SINGLE_PROBLEM;
-        //runAlgorithm(SINGLE_PROBLEM);
+        algorithmRunner.executeSingleProblem();
     }
-    else if (numberOfArguments == 8)
+    else if (numberOfArguments == 4 || numberOfArguments == 8)
     {
-        programExecutionType = PARAMETERIZED_PROBLEM;
-        //runAlgorithm(PARAMETERIZED_PROBLEM);
+        algorithmRunner.executeParameterizedProblem(problemSize, blueBalls, greenBalls, redBalls);
     }
     else if (numberOfArguments == 10)
     {
-        programExecutionType = FULL_TESTING;
-        //runAlgorithm(PARAMETERIZED_PROBLEM);
+        algorithmRunner.executeFullTesting(problemSize, numberOfProblems, step, numberOfInstances);
     }
+    return 0;
 }

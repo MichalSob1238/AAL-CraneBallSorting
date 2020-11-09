@@ -8,7 +8,6 @@
 
 class Generator
 {
-    int ballsArraySize;
     std::random_device device;
     std::mt19937 randomNumberGenerator;
     std::uniform_int_distribution<int> ballsDistributor;
@@ -18,10 +17,10 @@ private:
     char transformIntToCharBall(int number);
 
 public:
-    Generator(int ballsNumber, std::vector<char> &ballsArray);
-    void generateRandomly();
-    void generateProportionally(int b, int g, int r);
-    bool generateFromShellInput();
+    Generator();
+    void generateRandomly(std::vector<char> &ballsArray, int ballsArraySize);
+    void generateProportionally(std::vector<char> &ballsArray, int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
+    bool generateFromShellInput(std::vector<char> &ballsArray);
 };
 
 #endif

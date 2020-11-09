@@ -8,22 +8,13 @@
 #include <stdexcept>
 #include "AlgorithmRunner.hpp"
 
-enum ProgramExecutionTypeEnum
-{
-    SINGLE_PROBLEM,
-    PARAMETERIZED_PROBLEM,
-    FULL_TESTING
-};
-
 class InterfaceHandler
 {
 private:
     AlgorithmRunner algorithmRunner;
-    ProgramExecutionTypeEnum programExecutionType;
     std::vector<std::string> arguments;
     std::string inputFile, outputFile;
     int numberOfArguments, problemSize, blueBalls, greenBalls, redBalls, numberOfProblems, step, numberOfInstances;
-
     void displayHelp();
     bool isSyntaxCorrect();
     void parseSingleProblem();

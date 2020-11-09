@@ -6,20 +6,18 @@ char Generator::transformIntToCharBall(int number)
         return 'B';
     if (number == 1)
         return 'G';
-    if (number = 2)
+    if (number == 2)
         return 'R';
     return 'E'; //TODO
 }
 
-Generator::Generator(int ballsNumber, std::vector<char> &ballsArray)
+Generator::Generator()
 {
-    ballsArraySize = ballsNumber;
-    this->ballsArray = ballsArray;
     randomNumberGenerator = std::mt19937(device());
     ballsDistributor = std::uniform_int_distribution<int>(std::uniform_int_distribution<>(0, 2));
 }
 
-void Generator::generateRandomly()
+void Generator::generateRandomly(std::vector<char> &ballsArray, int ballsArraySize)
 {
     for (int a = 0; a < ballsArraySize; a++)
     {
@@ -28,9 +26,14 @@ void Generator::generateRandomly()
     }
 }
 
-void Generator::generateProportionally(int b, int g, int r)
+void Generator::generateProportionally(std::vector<char> &ballsArray, int ballsArraySize, int b, int g, int r)
 {
     int counter = 0;
+    if (b == -1 && g == -1 && r == -1)
+    {
+        generateRandomly(ballsArray, ballsArraySize);
+        return;
+    }
     while (counter < b)
     {
         ballsArray.push_back('B');
@@ -48,10 +51,10 @@ void Generator::generateProportionally(int b, int g, int r)
         ballsArray.push_back('R');
         counter++;
     }
-    std::random_shuffle(ballsArray.begin(), ballsArray.end());
+    std::shuffle(ballsArray.begin(), ballsArray.end(), randomNumberGenerator);
 }
 
-bool Generator::generateFromShellInput()
+bool Generator::generateFromShellInput(std::vector<char> &ballsArray)
 {
     char character;
     while (std::cin >> character)
