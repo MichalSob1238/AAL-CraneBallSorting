@@ -12,8 +12,9 @@ char Generator::transformIntToCharBall(int number)
 }
 
 Generator::Generator()
-{
-    randomNumberGenerator = std::mt19937(device());
+{    
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    randomNumberGenerator = std::mt19937(seed);
     ballsDistributor = std::uniform_int_distribution<int>(std::uniform_int_distribution<>(0, 2));
 }
 

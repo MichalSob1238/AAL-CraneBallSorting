@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <random>
 #include <vector>
+#include <chrono>
 
 class Generator
 {
