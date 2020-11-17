@@ -18,6 +18,8 @@ public:
     void executeSingleProblem();
     void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
+
+    void SortBalls(std::vector<char> ballsArray);
 };
 
 #endif

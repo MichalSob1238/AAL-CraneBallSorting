@@ -6,7 +6,10 @@ void AlgorithmRunner::executeSingleProblem()
     //TODO CORRECT ALGORITHM
     //cout<<RESULT AND ALL THE OTHERS (IT GOES TO COUT CAUSE USER REDIRECT THE SHELL OUTPUT TO SOME FILE HE CHOOSES)
 }
+void AlgorithmRunner::SortBalls(std::vector<char> ballsArray)
+{
 
+}
 void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBalls, int greenBalls, int redBalls)
 {
     generator.generateProportionally(ballsArray, ballsArraySize, blueBalls, greenBalls, redBalls);
