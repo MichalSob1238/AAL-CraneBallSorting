@@ -19,7 +19,17 @@ public:
     void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
 
-    void SortBalls(std::vector<char> ballsArray);
+    void SortBallsBetter();
+
+    int findNextBall(char c, int unsBegin);
+
+    int findNextDifferentBall(char c, int unsBegin);
+
+    void sortGivenColour(char c, int unsortedBeginning, int amountOfBallsToSort);
+
+    void move(int i);
+
+    void positionBall(int unsortedBegining, int positionOfBall);
 };
 
 #endif

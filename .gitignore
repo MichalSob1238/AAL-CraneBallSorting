@@ -1,3 +1,6 @@
 .idea/
 bin/
 cmake-build-debug/
+in.txt
+main.exe.stackdump
+out.txt
