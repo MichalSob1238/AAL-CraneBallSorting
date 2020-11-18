@@ -30,6 +30,8 @@ public:
     void move(int i);
 
     void positionBall(int unsortedBegining, int positionOfBall);
+
+    void SortBallsWorse();
 };
 
 #endif

@@ -28,11 +28,61 @@ void AlgorithmRunner::SortBallsBetter()
     std::cout<<std::endl<<" ";
 }
 
+void AlgorithmRunner::SortBallsWorse()
+{
+    int countRed = 0 , countBlue=0, countGreen = 0;
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+        std::cout << *it<< ' ';
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+    {
+        switch (*it)
+        {
+            case 'R':
+                countRed++;
+                break;
+            case 'G':
+                countGreen++;
+                break;
+            case 'B':        //
+                countBlue++; //<-superfluous in our case
+                break;       //
+        }
+    }
+    std::cout<<"\n found "<<countRed<<" red balls\n";
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+        std::cout << *it<< ' ';
+    std::cout<<"\n ";
+    for (int i = 1; i <= countRed; i++)
+    {
+        positionBall(i, findNextBall('R', i));
+
+    }
+    std::cout << "The contents of ballsArray are:";
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+    {
+        std::cout << ' ' << *it;
+    }
+    std::cout<<"!!!!!!!!";
+
+    std::cout<<"\n found "<<countGreen<<" green balls\n";
+
+    for (int i = countRed+1; i <= countGreen + countRed; i++)
+    {
+        positionBall(i, findNextBall('G', i));
+
+    }
+    std::cout << "The contents of ballsArray are:";
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+    {
+        std::cout << ' ' << *it;
+    }
+}
+
 void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
     //TODO CORRECT ALGORITHM
-    SortBallsBetter();
+    SortBallsWorse();
     //cout<<RESULT AND ALL THE OTHERS (IT GOES TO COUT CAUSE USER REDIRECT THE SHELL OUTPUT TO SOME FILE HE CHOOSES)
 }
 
@@ -289,40 +339,22 @@ void AlgorithmRunner::move(int i) {
     tmp[0] = ballsArray[j];
     tmp[1] = ballsArray[j + 1];
     tmp[2] = ballsArray[j + 2];
-    std::cout<<std::endl;
-    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
-        std::cout  << *it << ' ' ;
-    std::cout<<std::endl;
-    std::cout << '\n' << tmp[0] << " " << ballsArray[j] <<" "<< tmp[1]<<" "<< ballsArray[j+1] << " " << tmp[2]<<" "<< ballsArray[j+2] << std::endl;
-   // std::cout << '\n' << ballsArray[j-1] <<"AAA"<<std::endl;
+
     ballsArray.erase(ballsArray.begin() + j);
     ballsArray.push_back(tmp[0]);
-    std::cout<<std::endl;
-    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
-        std::cout  << *it << ' ' ;
-    std::cout<<std::endl;
     ballsArray.erase(ballsArray.begin() + j);
     ballsArray.push_back(tmp[1]);
-    std::cout<<std::endl;
-    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
-        std::cout  << *it << ' ' ;
-    std::cout<<std::endl;
     ballsArray.erase(ballsArray.begin() + j);
-
     ballsArray.push_back(tmp[2]);
 
-    std::cout<<std::endl;
-    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
-        std::cout  << *it << ' ' ;
-    std::cout<<std::endl;
 }
 
 void AlgorithmRunner::positionBall(int unsortedBegining, int positionOfBall) {
     int tempLength=0;
     tempLength = ballsArray.size() - unsortedBegining + 1;
-    std::cout<<tempLength << "\n";
+
     if (tempLength > 5) {
-        std::cout << "\n tL > 5\n";
+
         if ((positionOfBall - unsortedBegining) % 3 == 0) {
             for (int i = 0; i < ((positionOfBall - unsortedBegining) / 3); i++)
                 move(unsortedBegining);
@@ -360,24 +392,24 @@ void AlgorithmRunner::positionBall(int unsortedBegining, int positionOfBall) {
         }
 
     } else if (tempLength == 5) {
-        std::cout << "\n tL = 5 \n";
+
         switch (positionOfBall - unsortedBegining) {
             case 1:
-                std::cout << "\n case1\n";
+
                 move(unsortedBegining);
                 move(unsortedBegining);
                 break;
             case 2:
-                 std::cout << "\n case2\n";
+
                 move(unsortedBegining + 1);
                 move(unsortedBegining);
                 break;
             case 3:
-                std::cout << "\n case3\n";
+
                 move(unsortedBegining);
                 break;
             case 4:
-                std::cout << "\n case4\n";
+
                 move(unsortedBegining);
                 move(unsortedBegining);
                 move(unsortedBegining);
