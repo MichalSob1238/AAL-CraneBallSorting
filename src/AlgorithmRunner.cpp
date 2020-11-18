@@ -50,7 +50,7 @@ void AlgorithmRunner::SortBallsWorse()
     }
     std::cout<<"\n found "<<countRed<<" red balls\n";
     for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
-        std::cout << *it<< ' ';
+        std::cout <<*it<< ' ';
     std::cout<<"\n ";
     for (int i = 1; i <= countRed; i++)
     {
@@ -82,7 +82,7 @@ void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
     //TODO CORRECT ALGORITHM
-    SortBallsWorse();
+    SortBallsBetter();
     //cout<<RESULT AND ALL THE OTHERS (IT GOES TO COUT CAUSE USER REDIRECT THE SHELL OUTPUT TO SOME FILE HE CHOOSES)
 }
 
