@@ -8,7 +8,7 @@ void Clock::start()
 void Clock::end()
 {
     endTime = std::chrono::high_resolution_clock::now();
-    timespan = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+    timespan = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
 }
 
 double Clock::elapsedTime()

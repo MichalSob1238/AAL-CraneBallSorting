@@ -15,6 +15,7 @@ Generator generator;
 Clock clock;
 public:
     //AlgorithmRunner();
+    int moveCount =0;
     void executeSingleProblem();
     void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
@@ -32,6 +33,8 @@ public:
     void positionBall(int unsortedBegining, int positionOfBall);
 
     void SortBallsWorse();
+
+    void printArray();
 };
 
 #endif
