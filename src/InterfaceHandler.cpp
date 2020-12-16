@@ -10,6 +10,7 @@ void InterfaceHandler::displayHelp()
     std::cout << " followed by B,G and R which are respectfully the amount of blue, green and red balls and saves the result to out.txt" << std::endl;
     std::cout << "3) crane -m3 -n A -k B -step C -r D allows to perform the whole testing phase-A is the problem size (number of balls) "
               << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a ballsArray saved in the output_ballsArray.txt file." << std::endl;
+    std::cout<< "4) crane -m4 -n A -p B allows to generate a problem instance, where A is the problem size and B is the probability that every generated ball will be the same as the one before it"<<std::endl;
     std::cout << "--------------------------------------------------------------------------------------------------------------------------------------------------"
               << "\n"
               << std::endl;
@@ -21,12 +22,15 @@ bool InterfaceHandler::isSyntaxCorrect()
     {
         if (numberOfArguments == 2)
             parseSingleProblem();
+        else if (numberOfArguments == 6)
+            parseProbabilisticProblem();
         else if (numberOfArguments == 4 || numberOfArguments == 8)
             parseParameterizedProblem();
         else if (numberOfArguments == 10)
             parseFullTesting();
         else
         {
+            std::cout<<"The number of arguments is: "<<numberOfArguments<<std::endl;
             std::cout << "The specified amount of argument does not match with any type of program execution" << std::endl;
             std::cout << "Please refer to the help below:" << std::endl;
             displayHelp();
@@ -43,7 +47,34 @@ bool InterfaceHandler::isSyntaxCorrect()
     }
     return true;
 }
-
+void InterfaceHandler::parseProbabilisticProblem()
+{
+    //crane -m4 -n X -p A
+    if (arguments[1] != "-m4")
+        throw "You used an amount of arguments characteristic for mode 4, but there's no -m4 modifier";
+    if (arguments[2] != "-n")
+        throw "Used a wrong specifier, there should be -n after -m4";
+    try
+    {
+        problemSize = std::stoi(arguments[3]);
+    }
+    catch (const std::invalid_argument &invalidArgument)
+    {
+        throw invalidArgument.what();
+    }
+    if (problemSize < 1)
+        throw "Invalid problem size";
+    if (arguments[4] != "-p")
+        throw "Used a wrong specifire, there should be -p after the problem size";
+    try
+    {
+        probability = std::stod(arguments[5]);
+    }
+    catch (const std::invalid_argument &invalidArgument)
+    {
+        throw invalidArgument.what();
+    }
+}
 void InterfaceHandler::parseSingleProblem()
 {
     if (arguments[1] != "-m1")
@@ -61,7 +92,7 @@ void InterfaceHandler::parseParameterizedProblem()
     {
         try
         {
-            problemSize == std::stoi(arguments[3]);
+            problemSize = std::stoi(arguments[3]);
         }
         catch (const std::invalid_argument &invalidArgument)
         {
@@ -135,6 +166,10 @@ int InterfaceHandler::startInterface()
     if (numberOfArguments == 2)
     {
         algorithmRunner.executeSingleProblem();
+    }
+    if (numberOfArguments == 6)
+    {
+        algorithmRunner.executeProbabilisticProblem(problemSize, probability);
     }
     else if (numberOfArguments == 4 || numberOfArguments == 8)
     {

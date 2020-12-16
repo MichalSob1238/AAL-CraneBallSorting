@@ -17,9 +17,9 @@ public:
     //AlgorithmRunner();
     int moveCount =0;
     void executeSingleProblem();
+    void executeProbabilisticProblem(int problemSize, double probability);
     void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
-
     void SortBallsBetter();
 
     int findNextBall(char c, int unsBegin);
@@ -34,7 +34,12 @@ public:
 
     void SortBallsWorse();
 
+    bool areBallsSorted();
+
+    void SortBallsBrutally();
+
     void printArray();
+    
 };
 
 #endif

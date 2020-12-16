@@ -12,10 +12,11 @@ char Generator::transformIntToCharBall(int number)
 }
 
 Generator::Generator()
-{    
+{
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     randomNumberGenerator = std::mt19937(seed);
     ballsDistributor = std::uniform_int_distribution<int>(std::uniform_int_distribution<>(0, 2));
+    probabilityGenerator = std::uniform_real_distribution<double>(std::uniform_real_distribution<>(0, 1));
 }
 
 void Generator::generateRandomly(std::vector<char> &ballsArray, int ballsArraySize)
@@ -24,6 +25,24 @@ void Generator::generateRandomly(std::vector<char> &ballsArray, int ballsArraySi
     {
         int generatedNumber = ballsDistributor(randomNumberGenerator);
         ballsArray.push_back(transformIntToCharBall(generatedNumber));
+    }
+}
+
+void Generator::generateProbabilistically(std::vector<char> &ballsArray, int ballsArraySize, double probability)
+{
+    int lastBall = ballsDistributor(randomNumberGenerator);
+    ballsArray.push_back(transformIntToCharBall(lastBall));
+    double probabilityOfSameBall;
+    for (int a = 0; a < ballsArraySize - 1; a++)
+    {
+        probabilityOfSameBall = probabilityGenerator(randomNumberGenerator);
+        if (probabilityOfSameBall <= probability)
+            ballsArray.push_back(transformIntToCharBall(lastBall));
+        else
+        {
+            int lastBall = ballsDistributor(randomNumberGenerator);
+            ballsArray.push_back(transformIntToCharBall(lastBall));
+        }
     }
 }
 

@@ -13,11 +13,12 @@ class InterfaceHandler
 private:
     AlgorithmRunner algorithmRunner;
     std::vector<std::string> arguments;
-    std::string inputFile, outputFile;
     int numberOfArguments, problemSize, blueBalls, greenBalls, redBalls, numberOfProblems, step, numberOfInstances;
+    double probability;
     void displayHelp();
     bool isSyntaxCorrect();
     void parseSingleProblem();
+    void parseProbabilisticProblem();
     void parseParameterizedProblem();
     void parseFullTesting();
 
