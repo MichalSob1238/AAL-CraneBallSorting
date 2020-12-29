@@ -13,13 +13,18 @@ class AlgorithmRunner
 std::vector<char> ballsArray;
 Generator generator;
 Clock clock;
+bool print = true;
 public:
     //AlgorithmRunner();
     int moveCount =0;
     void executeSingleProblem();
+
     void executeProbabilisticProblem(int problemSize, double probability);
+
     void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
+
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
+
     void SortBallsBetter();
 
     int findNextBall(char c, int unsBegin);
@@ -38,7 +43,7 @@ public:
 
     void SortBallsBrutally();
 
-    void printArray();
+    void printArray(int head = -1, int tail = -1);
 
 
 };
