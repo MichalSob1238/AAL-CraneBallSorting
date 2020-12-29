@@ -7,6 +7,7 @@
 #include <fstream>
 #include "Clock.hpp"
 #include "Generator.hpp"
+#include <utility>
 
 class AlgorithmRunner
 {
@@ -44,6 +45,8 @@ public:
     void SortBallsBrutally();
 
     void printArray(int head = -1, int tail = -1);
+
+    std::pair<int,int> longestColour();
 
 
 };

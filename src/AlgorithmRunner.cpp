@@ -93,9 +93,10 @@ void AlgorithmRunner::SortBallsBrutally()
 void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
+    sortByLongestColour();
     printArray();
-    SortBallsBetter();
-    printArray();
+    //SortBallsBetter();
+    //printArray();
 }
 
 void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probability)
@@ -448,4 +449,28 @@ void AlgorithmRunner::printArray(int head, int tail)
     }
 }
 
+std::pair<int,int> AlgorithmRunner::longestColour()
+{
+    std::pair<int, int> pair1;
+    char currentColour = 'R';
+    int longestColour = 0;
+    int currentLenght=1;
+    int pointing =0; //element of 0...n of vector that starts the longest colour chain
+    for (int i = 1; i < ballsArray.size(); i++) {
+        if (ballsArray[i - 1] == ballsArray[i] && ballsArray[i]== currentColour) {
+            currentLenght++;
+        } else {
+            if (currentLenght > longestColour)
+            {
+                longestColour = currentLenght;
+                pointing = i - longestColour ;
+            }
+            currentLenght = 1;
+        }
+    }
+    pair1.first = longestColour;
+    pair1.second = pointing;
+    std::cout<<longestColour<<"  "<<pointing;
+    return pair1;
+}
 
