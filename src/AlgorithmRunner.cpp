@@ -161,7 +161,9 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
     if (amountOfBallsToSort < 5)
     {
         for (int i = unsortedBeginning; i < unsortedBeginning + amountOfBallsToSort; i++)
+        {
             positionBall(i, findNextBall(c, i));
+        }
     }
     else
     {
@@ -185,6 +187,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             positionBall(unsortedBeginning, findNextBall(c, unsortedBeginning));
             positionBall(unsortedBeginning + 1, findNextBall(c, unsortedBeginning + 1));
         }
+        std::cout<<"END OF PREP";
         int head = ballsArray.size() + 1;
         int tail = ballsArray.size() + 1;
         int stepsNeeded = nd / 3;
@@ -300,6 +303,7 @@ void AlgorithmRunner::move(int i)
     ballsArray.erase(ballsArray.begin() + j);
     ballsArray.push_back(tmp[2]);
     moveCount++;
+    printArray();
 }
 
 void AlgorithmRunner::positionBall(int unsortedBegining, int positionOfBall)
@@ -417,3 +421,5 @@ void AlgorithmRunner::printArray()
         std::cout << *it << ' ';
     std::cout << "\n ";
 }
+
+

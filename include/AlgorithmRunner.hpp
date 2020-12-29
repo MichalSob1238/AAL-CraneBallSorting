@@ -39,7 +39,8 @@ public:
     void SortBallsBrutally();
 
     void printArray();
-    
+
+
 };
 
 #endif
