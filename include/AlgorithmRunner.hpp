@@ -46,9 +46,11 @@ public:
 
     void printArray(int head = -1, int tail = -1);
 
-    std::pair<int,int> longestColour();
+    std::pair<int,int> longestColour(int beggining, char colour);
 
+    void sortByLongestColourProcedure();
 
+    void sortByLongestColour(std::pair<int, int> sequence,int beggining);
 };
 
 #endif

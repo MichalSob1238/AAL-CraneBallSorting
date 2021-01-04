@@ -93,7 +93,9 @@ void AlgorithmRunner::SortBallsBrutally()
 void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
-    sortByLongestColour();
+    //sortByLongestColour();
+    printArray();
+    sortByLongestColourProcedure();
     printArray();
     //SortBallsBetter();
     //printArray();
@@ -320,6 +322,7 @@ void AlgorithmRunner::move(int i)
     ballsArray.erase(ballsArray.begin() + j);
     ballsArray.push_back(tmp[2]);
     moveCount++;
+    printArray();
 }
 
 void AlgorithmRunner::positionBall(int unsortedBegining, int positionOfBall)
@@ -449,28 +452,186 @@ void AlgorithmRunner::printArray(int head, int tail)
     }
 }
 
-std::pair<int,int> AlgorithmRunner::longestColour()
+std::pair<int,int> AlgorithmRunner::longestColour(int beggining, char colour)
 {
     std::pair<int, int> pair1;
-    char currentColour = 'R';
+    char currentColour = colour;
     int longestColour = 0;
-    int currentLenght=1;
+    int maxLength=1;
     int pointing =0; //element of 0...n of vector that starts the longest colour chain
-    for (int i = 1; i < ballsArray.size(); i++) {
-        if (ballsArray[i - 1] == ballsArray[i] && ballsArray[i]== currentColour) {
-            currentLenght++;
-        } else {
-            if (currentLenght > longestColour)
-            {
-                longestColour = currentLenght;
-                pointing = i - longestColour ;
-            }
-            currentLenght = 1;
+    for (int i = beggining-1; i < ballsArray.size(); i++) {
+        if(ballsArray[i] == currentColour)
+        {   std::cout<<std::endl<<ballsArray[i];
+            if (ballsArray[i] == ballsArray[i+1] ) {
+                maxLength++; std::cout<<" maxL: "<<maxLength;
         }
+            else {
+                if (maxLength > longestColour)
+                {
+                    longestColour = maxLength;
+                    pointing = i - longestColour + 2 ;
+                    std::cout<<std::endl<<"Else happene";
+                }
+                maxLength = 1;
+            }
+        }
+
     }
-    pair1.first = longestColour;
-    pair1.second = pointing;
-    std::cout<<longestColour<<"  "<<pointing;
+    pair1.first =  pointing;
+    pair1.second = longestColour;
+    std::cout<<std::endl<<"longestColour "<<longestColour<<"  "<<"pointing"<<pointing<<std::endl;
     return pair1;
 }
 
+void AlgorithmRunner::sortByLongestColour(std::pair<int,int> sequence, int beginning)
+{
+    int start = sequence.first;
+    int lenOfSequence = sequence.second;
+    std::cout<<std::endl<<"thing points to letter "<<ballsArray[start-1]<<std::endl;
+    if(start==beginning)
+        return;
+    if (lenOfSequence == 1)
+    {
+        positionBall(beginning,start);
+        return;
+    }
+
+    int tempLength = ballsArray.size() - beginning + 1;
+    if (tempLength > 5)
+    {
+        if ((start - beginning) % 3 == 0)
+        {   std::cout<<std::endl<<"easiest case"<<std::endl;
+            for (int i = 0; i < ((start - beginning) / 3)  ; i++)
+                move(beginning);
+        }
+        else
+        {
+            int k = tempLength % 3;
+            switch (k)
+            {
+                case 0:
+                    std::cout<<std::endl<<"case 0"<<std::endl;
+                    if (start + 2 > ballsArray.size())
+                    {
+                        move(beginning);
+                        start -= 3;
+                    }
+
+                    for (int i = 0; i < (lenOfSequence-1)/3 + 1; ++i) {
+                        move(start);
+                    }
+
+                    for (int i = 0; i < (tempLength - lenOfSequence) / 3 ; i++)
+                        move(beginning);
+                    break;
+                case 1:
+                    std::cout<<std::endl<<" case 1"<<std::endl;
+                    if (start < beginning + 2)
+                    {
+                        for (int i = 0; i < lenOfSequence/3; ++i) {
+                            move(beginning);
+                            start = ballsArray.size() - 1;
+                        }
+
+                    }
+                    for (int i = 0; i < (lenOfSequence+1)/3 + 1; ++i) {
+                        move(start - 2);
+                    }
+                    for (int i = 0; i < (tempLength - lenOfSequence)/ 3; i++)
+                    {
+                        move(beginning);
+                    }
+                    break;
+                case 2:
+                    if (start == ballsArray.size())
+                    {
+                        move(beginning);
+                        start -= 3;
+                    }
+
+                    for (int i = 0; i < (lenOfSequence)/3+1; ++i) {
+                        move(start - 1);
+                    }
+                    for (int i = 0; i < (tempLength - lenOfSequence)/ 3; i++)
+                    {
+                        move(beginning);
+                    }
+                    break;
+            }
+        }
+    }
+    else
+    {
+        std::cout<<"this case invoked!";
+        //positionBall(beginning,start);
+    }
+//    if((start-beggining)%3==0)
+//    {
+//        for (int i = 0; i < (start-beggining)/3; ++i) {
+//            move(beggining);
+//        }
+//        return;
+//    }
+//    if ((ballsArray.size()+1 - start)%3==1)
+//    {
+//        move(start-2);
+//        for (int i = 0; i < (start-beggining)/3; ++i) {
+//            move(beggining);
+//        }
+//        for (int i = 0; i < (start-beggining)/3; ++i) {
+//            move(beggining);
+//        }
+//    }
+//    if ((ballsArray.size()+1 - start)%3==2)
+//    {
+//        move(start-1);
+//    }
+
+}
+
+void AlgorithmRunner::sortByLongestColourProcedure()
+{
+    int countRed = 0, countBlue = 0, countGreen = 0;
+    for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
+    {
+        switch (*it)
+        {
+            case 'R':
+                countRed++;
+                break;
+            case 'G':
+                countGreen++;
+                break;
+            case 'B':        //
+                countBlue++; //<-superfluous in our case
+                break;       //
+        }
+    }
+    int beginning = 1;
+    std::pair<int,int> parameters;
+    int iterations = 1;
+//    parameters = longestColour(beginning);
+ //   std::cout<<std::endl<<"pointing to: "<<parameters.first<<" of length: "<<parameters.second;
+    while (beginning < countRed+1 )
+    {
+        std::cout<<std::endl<<"Iteration number: "<<iterations<<"current progress: "<<beginning-1<<"/"<<countRed<<" state of array";
+        printArray();
+        //TODO: sort
+        parameters = longestColour(beginning, 'R');
+        sortByLongestColour(parameters,beginning);
+        beginning+= parameters.second;
+        iterations++;
+    }
+    std::cout<<"AAAAAAAA"; iterations=1; int b = beginning;
+    while (beginning < countGreen+b )
+    {
+        //TODO: sort
+        std::cout<<std::endl<<"Iteration number: "<<iterations<<"current progress: "<<beginning-b<<"/"<<countGreen<<" state of array";
+        printArray();
+        parameters = longestColour(beginning, 'G');
+        sortByLongestColour(parameters,beginning);
+        beginning+= parameters.second;
+        iterations++;
+    }
+
+}
