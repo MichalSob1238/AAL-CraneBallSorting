@@ -21,6 +21,7 @@ private:
     void parseProbabilisticProblem();
     void parseParameterizedProblem();
     void parseFullTesting();
+    void displayRunTypes();
 
 public:
     InterfaceHandler(int argc, char **&argv);

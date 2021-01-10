@@ -1,5 +1,34 @@
 #include "InterfaceHandler.hpp"
 
+int InterfaceHandler::startInterface()
+{
+    if (numberOfArguments <= 1)
+    {
+        displayHelp();
+        return 0;
+    }
+    if (!isSyntaxCorrect())
+        return 0;
+    displayRunTypes();
+    if (numberOfArguments == 2)
+    {
+        algorithmRunner.executeSingleProblem();
+    }
+    if (numberOfArguments == 6)
+    {
+        algorithmRunner.executeProbabilisticProblem(problemSize, probability);
+    }
+    else if (numberOfArguments == 4 || numberOfArguments == 8)
+    {
+        algorithmRunner.executeParameterizedProblem(problemSize, blueBalls, greenBalls, redBalls);
+    }
+    else if (numberOfArguments == 10)
+    {
+        algorithmRunner.executeFullTesting(problemSize, numberOfProblems, step, numberOfInstances);
+    }
+    return 1;
+}   
+
 void InterfaceHandler::displayHelp()
 {
     std::cout << "\n"
@@ -10,7 +39,7 @@ void InterfaceHandler::displayHelp()
     std::cout << " followed by B,G and R which are respectfully the amount of blue, green and red balls and saves the result to out.txt" << std::endl;
     std::cout << "3) crane -m3 -n A -k B -step C -r D allows to perform the whole testing phase-A is the problem size (number of balls) "
               << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a ballsArray saved in the output_ballsArray.txt file." << std::endl;
-    std::cout<< "4) crane -m4 -n A -p B allows to generate a problem instance, where A is the problem size and B is the probability that every generated ball will be the same as the one before it"<<std::endl;
+    std::cout << "4) crane -m4 -n A -p B allows to generate a problem instance, where A is the problem size and B is the probability that every generated ball will be the same as the one before it" << std::endl;
     std::cout << "--------------------------------------------------------------------------------------------------------------------------------------------------"
               << "\n"
               << std::endl;
@@ -30,7 +59,7 @@ bool InterfaceHandler::isSyntaxCorrect()
             parseFullTesting();
         else
         {
-            std::cout<<"The number of arguments is: "<<numberOfArguments<<std::endl;
+            std::cout << "The number of arguments is: " << numberOfArguments << std::endl;
             std::cout << "The specified amount of argument does not match with any type of program execution" << std::endl;
             std::cout << "Please refer to the help below:" << std::endl;
             displayHelp();
@@ -154,30 +183,18 @@ InterfaceHandler::InterfaceHandler(int argc, char **&argv)
     this->arguments = temp;
 }
 
-int InterfaceHandler::startInterface()
+void InterfaceHandler::displayRunTypes()
 {
-    if (numberOfArguments <= 1)
-    {
-        displayHelp();
-        return 0;
-    }
-    if (!isSyntaxCorrect())
-        return 0;
-    if (numberOfArguments == 2)
-    {
-        algorithmRunner.executeSingleProblem();
-    }
-    if (numberOfArguments == 6)
-    {
-        algorithmRunner.executeProbabilisticProblem(problemSize, probability);
-    }
-    else if (numberOfArguments == 4 || numberOfArguments == 8)
-    {
-        algorithmRunner.executeParameterizedProblem(problemSize, blueBalls, greenBalls, redBalls);
-    }
-    else if (numberOfArguments == 10)
-    {
-        algorithmRunner.executeFullTesting(problemSize, numberOfProblems, step, numberOfInstances);
-    }
-    return 0;
+    int type;
+    std::cout << "Please choose type of algorithm you want to try by choosing a number from 1 to 4. Choosing an incorrect number will result in running 1st option" << std::endl;
+    std::cout << "1) Normal algorithm, where crane picks and moves 3 balls, with optimization tricks reducing the time complexity" << std::endl;
+    std::cout << "2) The second, slower version of the algorithm" << std::endl;
+    std::cout << "3) Brutal solution to the problem, searching the tree of possible solutions" << std::endl;
+    std::cout << "4) A modified version of the problem, where the crane does not pick 3 balls, but a monocolor sequence of balls" << std::endl;
+    std::cin >> type;
+    if (type >= 1 && type <= 4)
+        algorithmRunner.setType(type);
+    else
+        std::cout << "Incorrect algorithm type chosen, 1st option will be used" << std::endl;
 }
+

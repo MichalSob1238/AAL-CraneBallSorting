@@ -11,22 +11,29 @@
 
 class AlgorithmRunner
 {
-std::vector<char> ballsArray;
-Generator generator;
-Clock clock;
-bool print = true;
+    std::vector<char> ballsArray;
+    Generator generator;
+    Clock clock;
+    bool print = true;
+
 public:
-    //AlgorithmRunner();
-    int moveCount =0;
+    int algorithmType = 1;
+
+    int moveCount = 0;
+
     void executeSingleProblem();
+
+    void setType(int type);
+
+    void runAlgorithm();
 
     void executeProbabilisticProblem(int problemSize, double probability);
 
-    void executeParameterizedProblem( int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
+    void executeParameterizedProblem(int ballsArraySize, int blueBalls, int greenBalls, int redBalls);
 
     void executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances);
 
-    void SortBallsBetter();
+    void sortBallsBetter();
 
     int findNextBall(char c, int unsBegin);
 
@@ -36,21 +43,21 @@ public:
 
     void move(int i);
 
-    void positionBall(int unsortedBegining, int positionOfBall);
+    void positionBall(int unsortedBeginning, int positionOfBall);
 
-    void SortBallsWorse();
+    void sortBallsWorse();
 
     bool areBallsSorted();
 
-    void SortBallsBrutally();
+    void sortBallsBrutally();
 
     void printArray(int head = -1, int tail = -1);
 
-    std::pair<int,int> longestColour(int beggining, char colour);
+    std::pair<int, int> longestColour(int beginning, char colour);
 
     void sortByLongestColourProcedure();
 
-    void sortByLongestColour(std::pair<int, int> sequence,int beggining);
+    void sortByLongestColour(std::pair<int, int> sequence, int beginning);
 };
 
 #endif
