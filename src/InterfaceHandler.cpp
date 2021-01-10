@@ -38,7 +38,7 @@ void InterfaceHandler::displayHelp()
     std::cout << "2) crane -m2 -n X -d B G R >> out.txt gets problem size X from user";
     std::cout << " followed by B,G and R which are respectfully the amount of blue, green and red balls and saves the result to out.txt" << std::endl;
     std::cout << "3) crane -m3 -n A -k B -step C -r D allows to perform the whole testing phase-A is the problem size (number of balls) "
-              << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a ballsArray saved in the output_ballsArray.txt file." << std::endl;
+              << "B is the number of problems, C is the step and D is the amount of problem instances per problem. It generates a table saved in the output_file.txt file." << std::endl;
     std::cout << "4) crane -m4 -n A -p B allows to generate a problem instance, where A is the problem size and B is the probability that every generated ball will be the same as the one before it" << std::endl;
     std::cout << "--------------------------------------------------------------------------------------------------------------------------------------------------"
               << "\n"

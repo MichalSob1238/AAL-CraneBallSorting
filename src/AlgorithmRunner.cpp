@@ -124,7 +124,7 @@ void AlgorithmRunner::executeSingleProblem()
     //printArray();
     std::cout << '\n'
               << clock.elapsedTime() << '\n'
-              << moveCount
+              <<moveCount
               << std::endl;
 }
 
@@ -138,7 +138,7 @@ void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probab
     printArray();
     std::cout << '\n'
               << clock.elapsedTime() << '\n'
-              << moveCount
+              <<moveCount
               << std::endl;
 }
 
@@ -148,10 +148,10 @@ void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBa
     clock.start();
     runAlgorithm();
     clock.end();
-    std::cout << '\n'
+       std::cout << '\n'
               << clock.elapsedTime() << '\n'
-              << moveCount
-              << std::endl;
+              <<moveCount
+              <<std::endl;
 }
 
 void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances)
@@ -165,14 +165,12 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
     }
     outputTableFile << "n"
                     << "\t"
-                    << "k"
-                    << "\t"
-                    << "t"
-                    << "\t"
                     << "time"
                     << "\t"
                     << "moveCount" << std::endl;
     int currentProblemSize = problemSize;
+    double time = 0;
+    int moves = 0;
     for (int a = 0; a < numberOfProblems; a++)
     {
         for (int b = 0; b < numberOfInstances; b++)
@@ -182,9 +180,15 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
             clock.start();
             runAlgorithm();
             clock.end();
-            outputTableFile << currentProblemSize << "\t" << b << "\t" << a << "\t" << clock.elapsedTime() << "\t" << moveCount << std::endl;
+            time += clock.elapsedTime();
+            moves += moveCount;
             ballsArray.clear();
         }
+        time = time / numberOfInstances;
+        moves = moves / numberOfInstances;
+        outputTableFile << currentProblemSize << "\t" << time << "\t" << moves << std::endl;
+        time = 0;
+        moves = 0;
         currentProblemSize = currentProblemSize + step;
     }
     outputTableFile.close();
@@ -268,7 +272,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             else
             {
                 unsigned int begTMP = tail;
-                for (begTMP = tail; begTMP <= tail + 2; begTMP++)
+                for (begTMP=tail; begTMP <= tail + 2; begTMP++)
                 {
                     positionBall(begTMP, findNextDifferentBall(c, begTMP));
                 }
@@ -398,7 +402,7 @@ void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
                 }
                 break;
             case 2:
-                if ((unsigned int)positionOfBall == ballsArray.size())
+                if ((unsigned int) positionOfBall == ballsArray.size())
                 {
                     move(unsortedBeginning);
                     positionOfBall -= 3;
@@ -465,7 +469,7 @@ void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
 
 void AlgorithmRunner::printArray(int head, int tail)
 {
-    std::cout << std::endl;
+    /*std::cout << std::endl;
     if (head > -1)
     {
         for (int p = 1; p < head; p++)
@@ -484,7 +488,7 @@ void AlgorithmRunner::printArray(int head, int tail)
             std::cout << "  ";
         }
         std::cout << "T" << std::endl;
-    }
+    }*/
 }
 
 std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
