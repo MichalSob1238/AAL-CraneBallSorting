@@ -18,7 +18,7 @@ void AlgorithmRunner::runAlgorithm()
         sortBallsBrutally();
         break;
     case 4:
-        //TODO SORTOWANIE PO KOLORZE
+        sortByLongestColourProcedure();
         break;
     default:
         std::cout << "Something went wrong while trying to run the algorithm" << std::endl;
@@ -117,47 +117,36 @@ void AlgorithmRunner::sortBallsBrutally()
 void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
-    printArray();
-    sortByLongestColourProcedure();
-    printArray();
+    //printArray();
+    runAlgorithm();
+    //printArray();
     //sortBallsBetter();
     //printArray();
-    std::cout << '\n'
-              << clock.elapsedTime() << '\n'
-              <<moveCount
-              << std::endl;
 }
 
 void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probability)
 {
     generator.generateProbabilistically(ballsArray, problemSize, probability);
-    printArray();
-    clock.start();
+    //printArray();
+    //clock.start();
     runAlgorithm();
-    clock.end();
-    printArray();
-    std::cout << '\n'
-              << clock.elapsedTime() << '\n'
-              <<moveCount
-              << std::endl;
+    //clock.end();
+    //printArray();
+
 }
 
 void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBalls, int greenBalls, int redBalls)
 {
     generator.generateProportionally(ballsArray, ballsArraySize, blueBalls, greenBalls, redBalls);
-    clock.start();
+    //clock.start();
     runAlgorithm();
-    clock.end();
-       std::cout << '\n'
-              << clock.elapsedTime() << '\n'
-              <<moveCount
-              <<std::endl;
+    //clock.end();
 }
 
 void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances)
 {
     std::fstream outputTableFile;
-    outputTableFile.open("output_table.txt", std::ios::out | std::ios::trunc);
+    outputTableFile.open("output_table.txt", std::ios::out);
     if (outputTableFile.good() == false)
     {
         std::cout << "Proba stworzenie pliku nie powiodla sie" << std::endl;
@@ -225,7 +214,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             positionBall(unsortedBeginning, findNextBall(c, unsortedBeginning));
             positionBall(unsortedBeginning + 1, findNextBall(c, unsortedBeginning + 1));
         }
-        printArray();
+        //printArray();
         int head = ballsArray.size() + 1;
         unsigned int tail = ballsArray.size() + 1;
         int stepsNeeded = nd / 3;
@@ -257,11 +246,11 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
                 if (LiczI < 3)
                 {
 
-                    printArray(head, tail);
+                    //printArray(head, tail);
                     move(head);
                     tail -= 3;
                     barrelsOutsideTail += LiczI;
-                    printArray(head, tail);
+                   //printArray(head, tail);
                 }
                 else
                 {
@@ -288,11 +277,11 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
                     if (tail < ballsArray.size() - 2)
                     {
 
-                        printArray(head, tail);
+                       // printArray(head, tail);
                         move(tail);
                         tail = ballsArray.size() - 2;
 
-                        printArray(head, tail);
+                        //printArray(head, tail);
                     }
                     else
                     {
@@ -304,9 +293,9 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
         if (nd % 3 > 0)
         {
 
-            printArray(head, tail);
+            //printArray(head, tail);
             move(unsortedBeginning);
-            printArray(head, tail);
+            //printArray(head, tail);
         }
         int beg = unsortedBeginning;
         for (int k = 0; k < stepsNeeded; k++)
@@ -314,9 +303,9 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             while (ballsArray[beg - 1] == c)
                 beg++;
 
-            printArray(head, tail);
+            //printArray(head, tail);
             move(beg);
-            printArray(head, tail);
+            //printArray(head, tail);
         }
     }
 }
@@ -646,12 +635,14 @@ void AlgorithmRunner::sortByLongestColourProcedure()
         sortByLongestColour(parameters, beginning);
         beginning += parameters.second;
         iterations++;
+        std::cout<<"BEGINNING "<<beginning<<" "<<countRed<<std::endl;
     }
 
     iterations = 1;
     int b = beginning;
     while (beginning < countGreen + b)
     {
+        std::cout<<"GREEN "<<beginning<<" "<<countGreen<<" "<<countRed<<" "<<countGreen+b<<std::endl;
         //TODO: sort
 //        std::cout << std::endl
 //                  << "Iteration number: " << iterations << "current progress: " << beginning - b << "/" << countGreen << " state of array";
