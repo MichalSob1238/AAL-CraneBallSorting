@@ -629,7 +629,8 @@ void AlgorithmRunner::sortByLongestColourProcedure()
     int beginning = 1;
     std::pair<int, int> parameters;
     int iterations = 1;
-    printArray(); std::cout<<std::endl<<"TAKE THIS";
+    //printArray(); 
+    //std::cout<<std::endl<<"TAKE THIS";
     while (beginning < countRed + 1)
     {
 //        std::cout << std::endl
@@ -640,47 +641,27 @@ void AlgorithmRunner::sortByLongestColourProcedure()
         sortByLongestColour(parameters, beginning);
         beginning += parameters.second;
         iterations++;
-        std::cout<<"BEGINNING "<<beginning<<" "<<countRed<<std::endl;
     }
 
     iterations = 1;
     int b = beginning;
     try {
-        while (std::cout << "a" && beginning < countGreen + b) {
-            std::cout << std::endl << "GREEN " << beginning << " " << countGreen << " " << countRed << " "
-                      << countGreen + b << std::endl;
+        while (beginning < countGreen + b) {
             //TODO: sort
-            printArray();
+            ///printArray();
 //        std::cout << std::endl
 //                  << "Iteration number: " << iterations << "current progress: " << beginning - b << "/" << countGreen << " state of array";
 //        printArray();
-            std::cout << "a";
             parameters = longestColour(beginning, 'G');
-            std::cout << "b";
             sortByLongestColour(parameters, beginning);
-            std::cout << "c";
             beginning += parameters.second;
-            std::cout << "d";
             iterations++;
-            std::cout << "e" << std::endl;
-            std::cout << std::endl << "END: GREEN " << beginning << " " << countGreen << " " << countRed << " "
-                      << countGreen + b << std::endl;
-            std::cout << "WAAAAA" << std::endl;
-            if(beginning < (countGreen + b))
-            {
-                std::cout<<"THISSS";
-            }
-            if(beginning == (countGreen + b))
-            {
-                std::cout<<"THAT";
-                break;
-            }
         }
     } catch(std::exception e)
     {
-        std::cout<<" excepti on "<<e.what()<<std::endl;
+        std::cout<<" exception "<<e.what()<<std::endl;
     }
-    std::cout<<"HOORAAY";
+    //std::cout<<"HOORAAY";
 
     //printArray();
 }
