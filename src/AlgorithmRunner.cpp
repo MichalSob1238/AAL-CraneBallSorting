@@ -503,8 +503,12 @@ std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
             }
         }
     }
+    if (pointing == 0)
+        std::cout<<"THIS";
     pair1.first = pointing;
     pair1.second = longestColour;
+    if(pair1.second == 0)
+        pair1.second = 1;
 //    std::cout << std::endl
 //              << "longestColour " << longestColour << "  "
 //              << "pointing" << pointing << std::endl;
@@ -517,7 +521,7 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
     int lenOfSequence = sequence.second;
 //    std::cout << std::endl
 //              << "thing points to letter " << ballsArray[start - 1] << std::endl;
-    if (start == beginning)
+    if (start == beginning || start<beginning)
         return;
     if (lenOfSequence == 1)
     {
@@ -625,6 +629,7 @@ void AlgorithmRunner::sortByLongestColourProcedure()
     int beginning = 1;
     std::pair<int, int> parameters;
     int iterations = 1;
+    printArray(); std::cout<<std::endl<<"TAKE THIS";
     while (beginning < countRed + 1)
     {
 //        std::cout << std::endl
@@ -640,16 +645,42 @@ void AlgorithmRunner::sortByLongestColourProcedure()
 
     iterations = 1;
     int b = beginning;
-    while (beginning < countGreen + b)
-    {
-        std::cout<<"GREEN "<<beginning<<" "<<countGreen<<" "<<countRed<<" "<<countGreen+b<<std::endl;
-        //TODO: sort
+    try {
+        while (std::cout << "a" && beginning < countGreen + b) {
+            std::cout << std::endl << "GREEN " << beginning << " " << countGreen << " " << countRed << " "
+                      << countGreen + b << std::endl;
+            //TODO: sort
+            printArray();
 //        std::cout << std::endl
 //                  << "Iteration number: " << iterations << "current progress: " << beginning - b << "/" << countGreen << " state of array";
 //        printArray();
-        parameters = longestColour(beginning, 'G');
-        sortByLongestColour(parameters, beginning);
-        beginning += parameters.second;
-        iterations++;
+            std::cout << "a";
+            parameters = longestColour(beginning, 'G');
+            std::cout << "b";
+            sortByLongestColour(parameters, beginning);
+            std::cout << "c";
+            beginning += parameters.second;
+            std::cout << "d";
+            iterations++;
+            std::cout << "e" << std::endl;
+            std::cout << std::endl << "END: GREEN " << beginning << " " << countGreen << " " << countRed << " "
+                      << countGreen + b << std::endl;
+            std::cout << "WAAAAA" << std::endl;
+            if(beginning < (countGreen + b))
+            {
+                std::cout<<"THISSS";
+            }
+            if(beginning == (countGreen + b))
+            {
+                std::cout<<"THAT";
+                break;
+            }
+        }
+    } catch(std::exception e)
+    {
+        std::cout<<" excepti on "<<e.what()<<std::endl;
     }
+    std::cout<<"HOORAAY";
+
+    //printArray();
 }
