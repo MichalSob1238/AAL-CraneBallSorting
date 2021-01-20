@@ -97,7 +97,8 @@ void AlgorithmRunner::sortBallsBrutally()
     int moves = 0;
     int arrayIndex = 0;
     int lastMoveIndex = ballsArray.size() - 3;
-    while (1)
+    int counter=0;
+    while (counter<100000)
     {
         ballsArray = possibilities[arrayIndex];
         if (areBallsSorted())
@@ -110,8 +111,13 @@ void AlgorithmRunner::sortBallsBrutally()
             possibilities.push_back(ballsArray);
         }
         arrayIndex++;
+        counter++;
     }
     moveCount = moves;
+    if (counter==100000){
+        moveCount=-1;
+    }
+    counter=0;
 }
 
 void AlgorithmRunner::executeSingleProblem()
