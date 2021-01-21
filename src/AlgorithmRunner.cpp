@@ -89,6 +89,7 @@ bool AlgorithmRunner::areBallsSorted()
         return true;
     return false;
 }
+
 void AlgorithmRunner::sortBallsBrutally()
 {
     std::vector<std::vector<char>> possibilities;
@@ -97,57 +98,65 @@ void AlgorithmRunner::sortBallsBrutally()
     int moves = 0;
     int arrayIndex = 0;
     int lastMoveIndex = ballsArray.size() - 3;
-    int counter=0;
-    while (counter<100000)
+    int counter = 0;
+    try
     {
-        ballsArray = possibilities[arrayIndex];
-        if (areBallsSorted())
-            break;
-        moves++;
-        for (int a = 0; a < lastMoveIndex; a++)
+        while (1)
         {
             ballsArray = possibilities[arrayIndex];
-            move(a + 1);
-            possibilities.push_back(ballsArray);
+            if (areBallsSorted())
+                break;
+            moves++;
+            for (int a = 0; a < lastMoveIndex; a++)
+            {
+                ballsArray = possibilities[arrayIndex];
+                move(a + 1);
+                possibilities.push_back(ballsArray);
+            }
+            arrayIndex++;
+            counter++;
         }
-        arrayIndex++;
-        counter++;
+    }
+    catch (std::exception e)
+    {
+        moves = -1;
     }
     moveCount = moves;
-    if (counter==100000){
-        moveCount=-1;
-    }
-    counter=0;
 }
 
 void AlgorithmRunner::executeSingleProblem()
 {
     generator.generateFromShellInput(ballsArray);
-    //printArray();
+    printArray();
+    clock.start();
     runAlgorithm();
-    //printArray();
-    //sortBallsBetter();
-    //printArray();
+    clock.end();
+    printArray();
+    std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
 }
 
 void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probability)
 {
     generator.generateProbabilistically(ballsArray, problemSize, probability);
     //printArray();
-    //clock.start();
+    clock.start();
     runAlgorithm();
-    //clock.end();
+    clock.end();
     //printArray();
-
+    //std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
 }
 
 void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBalls, int greenBalls, int redBalls)
 {
     generator.generateProportionally(ballsArray, ballsArraySize, blueBalls, greenBalls, redBalls);
-    //clock.start();
+    printArray();
+    clock.start();
     runAlgorithm();
-    //clock.end();
+    clock.end();
+    printArray();
+    std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
 }
+
 
 void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances)
 {
@@ -168,6 +177,7 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
     int moves = 0;
     for (int a = 0; a < numberOfProblems; a++)
     {
+        int denominator = numberOfInstances;
         for (int b = 0; b < numberOfInstances; b++)
         {
             moveCount = 0;
@@ -175,16 +185,26 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
             clock.start();
             runAlgorithm();
             clock.end();
-            time += clock.elapsedTime();
-            moves += moveCount;
+            if (moveCount != -1)
+            {
+                time += clock.elapsedTime();
+                moves += moveCount;
+            }
+            else
+            {
+                denominator--;
+            }
             ballsArray.clear();
         }
-        time = time / numberOfInstances;
-        moves = moves / numberOfInstances;
+        if (denominator != 0)
+        {
+            time = time / denominator;
+            moves = moves / denominator;
+        }
         outputTableFile << currentProblemSize << "\t" << time << "\t" << moves << std::endl;
         time = 0;
         moves = 0;
-        currentProblemSize = currentProblemSize + step;
+        //currentProblemSize = currentProblemSize + step;
     }
     outputTableFile.close();
 }
@@ -256,7 +276,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
                     move(head);
                     tail -= 3;
                     barrelsOutsideTail += LiczI;
-                   //printArray(head, tail);
+                    //printArray(head, tail);
                 }
                 else
                 {
@@ -266,7 +286,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             else
             {
                 unsigned int begTMP = tail;
-                for (begTMP=tail; begTMP <= tail + 2; begTMP++)
+                for (begTMP = tail; begTMP <= tail + 2; begTMP++)
                 {
                     positionBall(begTMP, findNextDifferentBall(c, begTMP));
                 }
@@ -283,7 +303,7 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
                     if (tail < ballsArray.size() - 2)
                     {
 
-                       // printArray(head, tail);
+                        // printArray(head, tail);
                         move(tail);
                         tail = ballsArray.size() - 2;
 
@@ -348,7 +368,7 @@ void AlgorithmRunner::move(int i)
     ballsArray.erase(ballsArray.begin() + j);
     ballsArray.push_back(tmp[2]);
     moveCount++;
-
+    //std::cout<<moveCount<<std::endl;
 }
 
 void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
@@ -394,7 +414,7 @@ void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
                 }
                 break;
             case 2:
-                if ((unsigned int) positionOfBall == ballsArray.size())
+                if ((unsigned int)positionOfBall == ballsArray.size())
                 {
                     move(unsortedBeginning);
                     positionOfBall -= 3;
@@ -461,24 +481,30 @@ void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
 
 void AlgorithmRunner::printArray(int head, int tail)
 {
-    if (print) {
+    if (print)
+    {
         std::cout << std::endl;
-        if (head > -1) {
-            for (int p = 1; p < head; p++) {
+        if (head > -1)
+        {
+            for (int p = 1; p < head; p++)
+            {
                 std::cout << "  ";
             }
             std::cout << "H" << std::endl;
         }
         for (std::vector<char>::iterator it = ballsArray.begin(); it != ballsArray.end(); ++it)
             std::cout << *it << ' ';
-        if (tail > -1) {
+        if (tail > -1)
+        {
             std::cout << std::endl;
-            for (int p = 1; p < tail; p++) {
+            for (int p = 1; p < tail; p++)
+            {
                 std::cout << "  ";
             }
             std::cout << "T" << std::endl;
         }
     }
+    std::cout<<std::endl;
 }
 
 std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
@@ -496,7 +522,6 @@ std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
             if (ballsArray[i] == ballsArray[i + 1])
             {
                 maxLength++;
-
             }
             else
             {
@@ -509,15 +534,15 @@ std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
             }
         }
     }
-    if (pointing == 0)
-        std::cout<<"THIS";
+    //if (pointing == 0)
+    //  std::cout<<"THIS";
     pair1.first = pointing;
     pair1.second = longestColour;
-    if(pair1.second == 0)
+    if (pair1.second == 0)
         pair1.second = 1;
-//    std::cout << std::endl
-//              << "longestColour " << longestColour << "  "
-//              << "pointing" << pointing << std::endl;
+    //    std::cout << std::endl
+    //              << "longestColour " << longestColour << "  "
+    //              << "pointing" << pointing << std::endl;
     return pair1;
 }
 
@@ -525,9 +550,9 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
 {
     int start = sequence.first;
     int lenOfSequence = sequence.second;
-//    std::cout << std::endl
-//              << "thing points to letter " << ballsArray[start - 1] << std::endl;
-    if (start == beginning || start<beginning)
+    //    std::cout << std::endl
+    //              << "thing points to letter " << ballsArray[start - 1] << std::endl;
+    if (start == beginning || start < beginning)
         return;
     if (lenOfSequence == 1)
     {
@@ -540,8 +565,8 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
     {
         if ((start - beginning) % 3 == 0)
         {
-//            std::cout << std::endl
-//                      << "easiest case" << std::endl;
+            //            std::cout << std::endl
+            //                      << "easiest case" << std::endl;
             for (int i = 0; i < ((start - beginning) / 3); i++)
                 move(beginning);
         }
@@ -551,8 +576,8 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
             switch (k)
             {
             case 0:
-//                std::cout << std::endl
-//                          << "case 0" << std::endl;
+                //                std::cout << std::endl
+                //                          << "case 0" << std::endl;
                 if ((unsigned int)start + 2 > ballsArray.size())
                 {
                     move(beginning);
@@ -568,8 +593,8 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
                     move(beginning);
                 break;
             case 1:
-//                std::cout << std::endl
-//                          << " case 1" << std::endl;
+                //                std::cout << std::endl
+                //                          << " case 1" << std::endl;
                 if (start < beginning + 2)
                 {
                     for (int i = 0; i < lenOfSequence / 3; ++i)
@@ -608,10 +633,9 @@ void AlgorithmRunner::sortByLongestColour(std::pair<int, int> sequence, int begi
     }
     else
     {
-        std::cout << "this case invoked!";
-        positionBall(beginning,start);
+        //std::cout << "this case invoked!";
+        positionBall(beginning, start);
     }
-
 }
 
 void AlgorithmRunner::sortByLongestColourProcedure()
@@ -635,14 +659,14 @@ void AlgorithmRunner::sortByLongestColourProcedure()
     int beginning = 1;
     std::pair<int, int> parameters;
     int iterations = 1;
-    //printArray(); 
+    //printArray();
     //std::cout<<std::endl<<"TAKE THIS";
     while (beginning < countRed + 1)
     {
-//        std::cout << std::endl
-//                  << "Iteration number: " << iterations
-//                  << "current progress: " << beginning - 1 << "/" << countRed << " state of array";
-       // printArray();
+        //        std::cout << std::endl
+        //                  << "Iteration number: " << iterations
+        //                  << "current progress: " << beginning - 1 << "/" << countRed << " state of array";
+        // printArray();
         parameters = longestColour(beginning, 'R');
         sortByLongestColour(parameters, beginning);
         beginning += parameters.second;
@@ -651,21 +675,24 @@ void AlgorithmRunner::sortByLongestColourProcedure()
 
     iterations = 1;
     int b = beginning;
-    try {
-        while (beginning < countGreen + b) {
+    try
+    {
+        while (beginning < countGreen + b)
+        {
             //TODO: sort
             ///printArray();
-//        std::cout << std::endl
-//                  << "Iteration number: " << iterations << "current progress: " << beginning - b << "/" << countGreen << " state of array";
-//        printArray();
+            //        std::cout << std::endl
+            //                  << "Iteration number: " << iterations << "current progress: " << beginning - b << "/" << countGreen << " state of array";
+            //        printArray();
             parameters = longestColour(beginning, 'G');
             sortByLongestColour(parameters, beginning);
             beginning += parameters.second;
             iterations++;
         }
-    } catch(std::exception e)
+    }
+    catch (std::exception e)
     {
-        std::cout<<" exception "<<e.what()<<std::endl;
+        std::cout << " exception " << e.what() << std::endl;
     }
     //std::cout<<"HOORAAY";
 
