@@ -204,7 +204,7 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
         outputTableFile << currentProblemSize << "\t" << time << "\t" << moves << std::endl;
         time = 0;
         moves = 0;
-        //currentProblemSize = currentProblemSize + step;
+        currentProblemSize = currentProblemSize + step;
     }
     outputTableFile.close();
 }
