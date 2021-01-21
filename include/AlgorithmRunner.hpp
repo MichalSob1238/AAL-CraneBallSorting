@@ -14,7 +14,7 @@ class AlgorithmRunner
     std::vector<char> ballsArray;
     Generator generator;
     Clock clock;
-    bool print = true;
+    bool print = false;
 
 public:
     int algorithmType = 1;

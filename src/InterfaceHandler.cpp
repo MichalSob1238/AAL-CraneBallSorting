@@ -190,7 +190,7 @@ void InterfaceHandler::displayRunTypes()
     std::cout << "1) Normal algorithm, where crane picks and moves 3 balls, with optimization tricks reducing the time complexity" << std::endl;
     std::cout << "2) The second, slower version of the algorithm" << std::endl;
     std::cout << "3) Brutal solution to the problem, searching the tree of possible solutions" << std::endl;
-    std::cout << "4) A modified version of the problem, where the crane does not pick 3 balls, but a monocolor sequence of balls" << std::endl;
+    std::cout << "4) A modified version of the simpler algorithm, where the crane prioritizes longest sequences of the sorted colour" << std::endl;
     std::cin >> type;
     if (type >= 1 && type <= 4)
         algorithmRunner.setType(type);
