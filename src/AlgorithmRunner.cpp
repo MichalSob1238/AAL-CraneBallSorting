@@ -80,11 +80,11 @@ bool AlgorithmRunner::areBallsSorted()
 {
     unsigned int index = 0;
     while (ballsArray[index] == 'R')
-        index++;
+        ++index;
     while (ballsArray[index] == 'G')
-        index++;
-    while (ballsArray[index] == 'B')
-        index++;
+        ++index;
+    while (ballsArray[index] == 'B' && index < ballsArray.size())
+        ++index;
     if (index == ballsArray.size())
         return true;
     return false;
@@ -132,7 +132,8 @@ void AlgorithmRunner::executeSingleProblem()
     runAlgorithm();
     clock.end();
     printArray();
-    std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
+    std::cout << "time: " << clock.elapsedTime()
+              << ", moves " << moveCount << std::endl;
 }
 
 void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probability)
@@ -143,7 +144,8 @@ void AlgorithmRunner::executeProbabilisticProblem(int problemSize, double probab
     runAlgorithm();
     clock.end();
     printArray();
-    std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
+    std::cout << "time: " << clock.elapsedTime()
+              << ", moves " << moveCount << std::endl;
 }
 
 void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBalls, int greenBalls, int redBalls)
@@ -154,9 +156,9 @@ void AlgorithmRunner::executeParameterizedProblem(int ballsArraySize, int blueBa
     runAlgorithm();
     clock.end();
     printArray();
-    std::cout << clock.elapsedTime() << " " << moveCount << std::endl;
+    std::cout << "time: " << clock.elapsedTime()
+              << ", moves " << moveCount << std::endl;
 }
-
 
 void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, int step, int numberOfInstances)
 {
@@ -194,6 +196,8 @@ void AlgorithmRunner::executeFullTesting(int problemSize, int numberOfProblems, 
             {
                 denominator--;
             }
+            if (!areBallsSorted())
+                std::cout << "Something went wrong while sorting" << std::endl;
             ballsArray.clear();
         }
         if (denominator != 0)
@@ -221,8 +225,8 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
     else
     {
         //Prep
-        if(print)
-            std::cout<<"\n PREP \n";
+        if (print)
+            std::cout << "\n PREP \n";
         int nd = ballsArray.size() + 1 - unsortedBeginning - amountOfBallsToSort;
         if (nd % 3 > 0)
         {
@@ -242,8 +246,8 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
             positionBall(unsortedBeginning, findNextBall(c, unsortedBeginning));
             positionBall(unsortedBeginning + 1, findNextBall(c, unsortedBeginning + 1));
         }
-        if(print)
-            std::cout<<"\n ENDOFPREP \n";
+        if (print)
+            std::cout << "\n ENDOFPREP \n";
         int head = ballsArray.size() + 1;
         unsigned int tail = ballsArray.size() + 1;
         int stepsNeeded = nd / 3;
@@ -251,43 +255,38 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
         int barrelsOutsideTail = 0;
         while (stepsDone < stepsNeeded)
         {
-            printArray(head,tail);
+            printArray(head, tail);
             if (barrelsOutsideTail < 3)
             {
 
                 int LiczI = 1;
-                do {
+                do
+                {
                     head--;
-                }while (ballsArray[head-1]==c);
+                } while (ballsArray[head - 1] == c);
                 head--;
                 if (ballsArray[head - 1] != c)
                 {
-                    printArray(head,tail);
+                    printArray(head, tail);
                     LiczI++;
                 }
                 head--;
                 if (ballsArray[head - 1] != c)
                 {
-                    printArray(head,tail);
+                    printArray(head, tail);
                     LiczI++;
                 }
-//                head--;
-//                if (ballsArray[head - 1] != c)
-//                {
-//                    printArray(head,tail);
-//                    LiczI++;
-//                }
 
                 if (LiczI < 3)
                 {
-                    printArray(head,tail);
+                    printArray(head, tail);
                     move(head);
                     tail -= 3;
                     barrelsOutsideTail += LiczI;
                 }
                 else
                 {
-                    printArray(head,tail);
+                    printArray(head, tail);
                     stepsDone++;
                 }
             }
@@ -296,33 +295,26 @@ void AlgorithmRunner::sortGivenColour(char c, int unsortedBeginning, int amountO
                 unsigned int begTMP = tail;
                 for (begTMP = tail; begTMP <= tail + 2; begTMP++)
                 {
-                    printArray(head,tail);
+                    printArray(head, tail);
                     positionBall(begTMP, findNextDifferentBall(c, begTMP));
                 }
                 tail += 3;
                 stepsDone++;
                 barrelsOutsideTail -= 3;
-                printArray(head,tail);
+                printArray(head, tail);
                 if (barrelsOutsideTail == 0)
                     tail = ballsArray.size() + 1;
                 else
                 {
                     while (ballsArray[tail - 1] == c)
                     {
-                        printArray(head,tail);
+                        printArray(head, tail);
                         tail++;
                     }
-                    if (tail < ballsArray.size() - 2)
+                    if (!(tail < ballsArray.size() - 2))
                     {
-                        //move(tail);
-                        //tail = ballsArray.size() - 2;
-                    }
-                    else
-                    {
-                        printArray(head,tail);
-                        //std::cout<<"\n that one else \n";
+                        printArray(head, tail);
                         tail = ballsArray.size() - 2;
-
                     }
                 }
             }
@@ -360,25 +352,10 @@ int AlgorithmRunner::findNextDifferentBall(char c, int unsBegin)
 
 void AlgorithmRunner::move(int i)
 {
-    /*
-    char tmp[3];
-    int j = i - 1;
-
-    tmp[0] = ballsArray[j];
-    tmp[1] = ballsArray[j + 1];
-    tmp[2] = ballsArray[j + 2];
-
-    ballsArray.erase(ballsArray.begin() + j);
-    ballsArray.push_back(tmp[0]);
-    ballsArray.erase(ballsArray.begin() + j);
-    ballsArray.push_back(tmp[1]);
-    ballsArray.erase(ballsArray.begin() + j);
-    ballsArray.push_back(tmp[2]);
+    ballsArray.insert(ballsArray.end(), ballsArray.begin() + i - 1, ballsArray.begin() + i - 1 + 3);
+    ballsArray.erase(ballsArray.begin() + i - 1, ballsArray.begin() + i - 1 + 3);
     moveCount++;
-    printArray();*/
-    ballsArray.insert(ballsArray.end(),ballsArray.begin() + i - 1,ballsArray.begin() + i - 1 + 3);
-    ballsArray.erase(ballsArray.begin()+ i - 1,ballsArray.begin() + i - 1 +3);
-    moveCount++;
+    printArray();
 }
 
 void AlgorithmRunner::positionBall(int unsortedBeginning, int positionOfBall)
@@ -513,9 +490,8 @@ void AlgorithmRunner::printArray(int head, int tail)
             }
             std::cout << "T" << std::endl;
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
-
 }
 
 std::pair<int, int> AlgorithmRunner::longestColour(int beginning, char colour)
@@ -669,11 +645,11 @@ void AlgorithmRunner::sortByLongestColourProcedure()
 
     iterations = 1;
     int b = beginning;
-        while (beginning < countGreen + b)
-        {
-            parameters = longestColour(beginning, 'G');
-            sortByLongestColour(parameters, beginning);
-            beginning += parameters.second;
-            iterations++;
-        }
+    while (beginning < countGreen + b)
+    {
+        parameters = longestColour(beginning, 'G');
+        sortByLongestColour(parameters, beginning);
+        beginning += parameters.second;
+        iterations++;
+    }
 }

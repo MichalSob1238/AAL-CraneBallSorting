@@ -27,7 +27,15 @@ Dane wejściowe, jeśli użytkownik wybierze opcję wymagającą ich podania, to
 Wyniki są zapisywane do plików .txt lub wyświetlane na ekranie.
 
 -krótki opis metody rozwiązania, zastosowanych algorytmów i struktur danych
-TODO
+1) Najlepszy algorytm, który dzięki opisanym wyżej w dokumentacji, w sekcji "Algorytmy" (algorytm 2) modyfikacjom pozwala na rozwiązanie problemu w czasie liniowym
+
+2) Gorszy algorytm (algorytm 1), którego złożoność to O(n^2)
+
+3) Rozwiązanie brutalne, przeszukujące drzewo rozwiązań
+
+4) Zmodyfikowana wersja problemu, gdzie dźwig priorytetowo traktuje długie ciągi monokolorowe (również złożoność O(n^2))
+
+
 
 ****************************************************************************************
 -informacje o funkcjonalnej dekompozycji programu na moduły źródłowe - nagłówkowe i
