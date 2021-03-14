@@ -1,2 +1,2 @@
 # AAL-CraneBallSorting
- A solution to an algorithmic problem, with testing and results interpretation.
+ A project made for the Analisys of Algorighms course implementing and analysing several algorithms a theoretical crane machine could use to sort balls of three colours on a tilted surface
